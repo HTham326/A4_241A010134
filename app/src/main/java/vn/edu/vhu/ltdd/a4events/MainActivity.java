@@ -1,6 +1,7 @@
 package vn.edu.vhu.ltdd.a4events;
 
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "A4_241A010134";
 
-    private EditText edtSoA, edtSoB;
-    private TextView tvKetQua;
+    private EditText edtSoA, edtSoB, edtCanNang, edtChieuCao;
+    private TextView tvKetQua, tvBmi, tvPhanLoai;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -37,12 +38,17 @@ public class MainActivity extends AppCompatActivity {
         edtSoA = findViewById(R.id.edtSoA);
         edtSoB = findViewById(R.id.edtSoB);
         tvKetQua = findViewById(R.id.tvKetQua);
+        edtCanNang = findViewById(R.id.edtCanNang);
+        edtChieuCao = findViewById(R.id.edtChieuCao);
+        tvBmi = findViewById(R.id.tvBmi);
+        tvPhanLoai = findViewById(R.id.tvPhanLoai);
 
         Button btnCong = findViewById(R.id.btnCong);
         Button btnTru = findViewById(R.id.btnTru);
         Button btnNhan = findViewById(R.id.btnNhan);
         Button btnChia = findViewById(R.id.btnChia);
         Button btnXoa = findViewById(R.id.btnXoa);
+        Button btnTinhBmi = findViewById(R.id.btnTinhBmi);
 
         btnCong.setOnClickListener(v -> tinhToan('+'));
         btnTru.setOnClickListener(v -> tinhToan('-'));
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btnChia.setOnClickListener(chung);
 
         btnXoa.setOnClickListener(v -> xoaTrang());
+        btnTinhBmi.setOnClickListener(v -> tinhBmi());
     }
 
     private void tinhToan(char phepToan) {
@@ -112,5 +119,36 @@ public class MainActivity extends AppCompatActivity {
         edtSoB.setError(null);
         tvKetQua.setText(R.string.result_placeholder);
         edtSoA.requestFocus();
+    }
+
+    // ================ BMI ================
+    private void tinhBmi() {
+        try {
+            double canNang = Double.parseDouble(edtCanNang.getText().toString().trim());
+            double chieuCao = Double.parseDouble(edtChieuCao.getText().toString().trim());
+
+            if(canNang <= 0 || chieuCao <= 0 ) {
+                Toast.makeText(this, R.string.err_positive, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(chieuCao > 3) {
+                chieuCao = chieuCao / 100.0;
+            }
+
+            double bmi = canNang / (chieuCao * chieuCao);
+            tvBmi.setText(String.format(Locale.getDefault(), "BMI = %.1f", bmi));
+            tvPhanLoai.setText(phanLoai (bmi));
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Lỗi nhập liệu BMI", e);
+            Toast.makeText(this, R.string.err_not_number, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String phanLoai(double bmi) {
+        if(bmi < 18.5) return getString(R.string.bmi_under);
+        if(bmi < 23) return getString(R.string.bmi_normal);
+        if(bmi < 25) return getString(R.string.bmi_over);
+        return getString(R.string.bmi_obese);
     }
 }
