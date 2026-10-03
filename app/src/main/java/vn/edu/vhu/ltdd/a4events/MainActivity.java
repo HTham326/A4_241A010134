@@ -1,7 +1,6 @@
 package vn.edu.vhu.ltdd.a4events;
 
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnTru = findViewById(R.id.btnTru);
         Button btnNhan = findViewById(R.id.btnNhan);
         Button btnChia = findViewById(R.id.btnChia);
+        Button btnDaoDau = findViewById(R.id.btnDaoDau);
+        Button btnPhanTram = findViewById(R.id.btnPhanTram);
         Button btnXoa = findViewById(R.id.btnXoa);
         Button btnTinhBmi = findViewById(R.id.btnTinhBmi);
 
@@ -64,10 +65,83 @@ public class MainActivity extends AppCompatActivity {
         btnNhan.setOnClickListener(chung);
         btnChia.setOnClickListener(chung);
 
+        btnDaoDau.setOnClickListener(v -> daoDau());
+        btnPhanTram.setOnClickListener(v -> phanTram());
         btnXoa.setOnClickListener(v -> xoaTrang());
         btnTinhBmi.setOnClickListener(v -> tinhBmi());
+
+
     }
 
+    private void daoDau() {
+        EditText edtDangChon;
+
+        if(edtSoA.hasFocus()) {
+            edtDangChon = edtSoA;
+        } else if(edtSoB.hasFocus()) {
+            edtDangChon = edtSoB;
+        } else {
+            edtSoA.requestFocus();
+            edtDangChon = edtSoA;
+        }
+
+        String chuoi = edtDangChon.getText().toString().trim();
+
+        if(chuoi.isEmpty()) {
+            edtDangChon.setError(getString(R.string.err_empty));
+            edtDangChon.requestFocus();
+            return;
+        }
+
+        try {
+            double so = Double.parseDouble(chuoi);
+            so = so * (-1);
+
+            if(so == (long) so) {
+                edtDangChon.setText(String.valueOf((long) so));
+            } else {
+                edtDangChon.setText(String.valueOf(so));
+            }
+            edtDangChon.setSelection(edtDangChon.getText().length());
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, R.string.err_positive, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void phanTram() {
+        EditText edtDangChon;
+
+        if(edtSoA.hasFocus()) {
+            edtDangChon = edtSoA;
+        } else if(edtSoB.hasFocus()) {
+            edtDangChon = edtSoB;
+        } else {
+            edtSoA.requestFocus();
+            edtDangChon = edtSoA;
+        }
+
+        String chuoi = edtDangChon.getText().toString().trim();
+
+        if(chuoi.isEmpty()) {
+            edtDangChon.setError(getString(R.string.err_empty));
+            edtDangChon.requestFocus();
+            return;
+        }
+
+        try {
+            double so = Double.parseDouble(chuoi);
+            so = so / 100.0;
+
+            if(so == (long) so) {
+                edtDangChon.setText(String.valueOf((long) so));
+            } else {
+                edtDangChon.setText(String.valueOf(so));
+            }
+            edtDangChon.setSelection(edtDangChon.getText().length());
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, R.string.err_positive, Toast.LENGTH_SHORT).show();
+        }
+    }
     private void tinhToan(char phepToan) {
         String chuoiA = edtSoA.getText().toString().trim();
         String chuoiB = edtSoB.getText().toString().trim();
@@ -107,8 +181,15 @@ public class MainActivity extends AppCompatActivity {
             default: ketQua = a / b; break;
         }
 
-        tvKetQua.setText(String.format(Locale.getDefault(), "%.2f %c %.2f = %.2f",
-                a, phepToan, b, ketQua));
+        String hienThiB;
+
+        if(b < 0) {
+            hienThiB = String.format(Locale.getDefault(), "(%.2f)", b);
+        } else {
+            hienThiB = String.format(Locale.getDefault(), "%.2f", b);
+        }
+        tvKetQua.setText(String.format(Locale.getDefault(), "%.2f %c %s = %.2f",
+                a, phepToan, hienThiB, ketQua));
         Log.d(TAG, "Phép tính: " + a + " " + phepToan + " " + b + " = " + ketQua);
     }
 

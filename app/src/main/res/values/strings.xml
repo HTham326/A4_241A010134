@@ -9,8 +9,10 @@
     <string name="hint_b">Số thứ hai</string>
     <string name="op_add">+</string>
     <string name="op_sub">−</string>
+    <string name="op_dd">±</string>
     <string name="op_mul">×</string>
     <string name="op_div">÷</string>
+    <string name="op_ptr">%</string>
     <string name="clear">Xóa trắng</string>
     <string name="result_placeholder">Kết quả: —</string>
     <string name="hint_weight">Cân nặng (kg)</string>

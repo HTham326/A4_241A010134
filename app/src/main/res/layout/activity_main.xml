@@ -23,7 +23,7 @@
             android:text="@string/student"
             android:textSize="14sp" />
 
-        <!-- ================= MÁY TÍNH ================= -->
+        <!-- ================= MÁY TÍNH ================== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,6 +36,7 @@
             android:id="@+id/edtSoA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:hint="@string/hint_a"
             android:importantForAutofill="no"
             android:inputType="numberDecimal|numberSigned" />
@@ -70,6 +71,14 @@
                 android:text="@string/op_sub" />
 
             <Button
+                android:id="@+id/btnDaoDau"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/op_dd" />
+
+            <Button
                 android:id="@+id/btnNhan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -84,6 +93,15 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:text="@string/op_div" />
+
+            <Button
+                android:id="@+id/btnPhanTram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/op_ptr" />
+
         </LinearLayout>
 
         <TextView
@@ -103,7 +121,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/clear" />
 
-        <!-- ================= BMI ================= -->
+        <!-- =============== BMI =============== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
