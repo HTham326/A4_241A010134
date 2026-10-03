@@ -15,6 +15,7 @@
     <string name="op_ptr">%</string>
     <string name="clear">Xóa trắng</string>
     <string name="result_placeholder">Kết quả: —</string>
+    <string name="history">Lịch sử phép tính: </string>
     <string name="hint_weight">Cân nặng (kg)</string>
     <string name="hint_height">Chiều cao (m hoặc cm)</string>
     <string name="calc_bmi">Tính BMI</string>

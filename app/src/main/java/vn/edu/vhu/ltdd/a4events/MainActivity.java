@@ -15,13 +15,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Locale;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "A4_241A010134";
+    private static final String KEY_LICH_SU = "lich_su";
 
     private EditText edtSoA, edtSoB, edtCanNang, edtChieuCao;
-    private TextView tvKetQua, tvBmi, tvPhanLoai;
+    private TextView tvKetQua, tvLichSu, tvBmi, tvPhanLoai;
+
+    private char phepToanHienTai = '\0';
+
+    ArrayList<String> lichSu = new ArrayList<>();
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -37,6 +43,17 @@ public class MainActivity extends AppCompatActivity {
         edtSoA = findViewById(R.id.edtSoA);
         edtSoB = findViewById(R.id.edtSoB);
         tvKetQua = findViewById(R.id.tvKetQua);
+        tvLichSu = findViewById(R.id.tvLichSu);
+
+        if(savedInstanceState != null) {
+            ArrayList<String> lichSuDaLuu = savedInstanceState.getStringArrayList("KEY_LICH_SU");
+
+            if(lichSuDaLuu != null) {
+                lichSu = lichSuDaLuu;
+                hienThiLichSu();
+            }
+        }
+
         edtCanNang = findViewById(R.id.edtCanNang);
         edtChieuCao = findViewById(R.id.edtChieuCao);
         tvBmi = findViewById(R.id.tvBmi);
@@ -51,15 +68,23 @@ public class MainActivity extends AppCompatActivity {
         Button btnXoa = findViewById(R.id.btnXoa);
         Button btnTinhBmi = findViewById(R.id.btnTinhBmi);
 
-        btnCong.setOnClickListener(v -> tinhToan('+'));
-        btnTru.setOnClickListener(v -> tinhToan('-'));
+        btnCong.setOnClickListener(v -> {
+            phepToanHienTai = '+';
+            tinhToan(phepToanHienTai);
+        });
+        btnTru.setOnClickListener(v -> {
+            phepToanHienTai = '-';
+            tinhToan(phepToanHienTai);
+        });
 
         View.OnClickListener chung = v -> {
             int id = v.getId();
             if(id == R.id.btnNhan) {
-                tinhToan('*');
+                phepToanHienTai = '*';
+                tinhToan(phepToanHienTai);
             } else if(id == R.id.btnChia) {
-                tinhToan('/');
+                phepToanHienTai = '/';
+                tinhToan(phepToanHienTai);
             }
         };
         btnNhan.setOnClickListener(chung);
@@ -188,9 +213,36 @@ public class MainActivity extends AppCompatActivity {
         } else {
             hienThiB = String.format(Locale.getDefault(), "%.2f", b);
         }
-        tvKetQua.setText(String.format(Locale.getDefault(), "%.2f %c %s = %.2f",
-                a, phepToan, hienThiB, ketQua));
+
+        String phepTinh = String.format(Locale.getDefault(), "%.2f %c %s = %.2f",
+                a, phepToan, hienThiB, ketQua
+        );
+
+        tvKetQua.setText(phepTinh);
+        themLichSu(phepTinh);
+
         Log.d(TAG, "Phép tính: " + a + " " + phepToan + " " + b + " = " + ketQua);
+    }
+
+    private void themLichSu(String phepTinh){
+        lichSu.add(0, phepTinh);
+
+        if(lichSu.size() > 5) {
+            lichSu.remove(lichSu.size() - 1);
+        }
+
+        hienThiLichSu();
+    }
+
+    private void hienThiLichSu() {
+        StringBuilder noiDung = new StringBuilder();
+        noiDung.append("Lịch sử:\n");
+
+        for(String phepTinh : lichSu) {
+            noiDung.append(phepTinh).append("\n");
+        }
+
+        tvLichSu.setText(noiDung.toString());
     }
 
     private void xoaTrang() {
@@ -231,5 +283,11 @@ public class MainActivity extends AppCompatActivity {
         if(bmi < 23) return getString(R.string.bmi_normal);
         if(bmi < 25) return getString(R.string.bmi_over);
         return getString(R.string.bmi_obese);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList(KEY_LICH_SU, lichSu);
     }
 }
